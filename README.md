@@ -1,1 +1,1 @@
-# 42_n_puzzle
+# 42_n-puzzle
