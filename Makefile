@@ -12,14 +12,17 @@ DEPS := ${addprefix ${OBJS_DIR},${SRCS:.c=.d}}
 LIBDEQUE_DIR := libs/deque/
 LIBDEQUE := ${LIBDEQUE_DIR}libdeque.a
 
-LIBPQUEUE_DIR := libs/pqueue/
+LIBPQUEUE_DIR := libs/priority_queue/
 LIBPQUEUE := ${LIBPQUEUE_DIR}libpqueue.a
 
 LIBHASHSET_DIR := libs/hashset/
 LIBHASHSET := ${LIBHASHSET_DIR}libhashset.a
 
-INCS := -I./incs/ -I./${LIBDEQUE_DIR}incs/ \
-	-I./${LIBPQUEUE_DIR}incs/
+INCS := \
+	-I./incs/ \
+	-I./${LIBDEQUE_DIR}incs/ \
+	-I./${LIBPQUEUE_DIR}incs/ \
+	-I./${LIBHASHSET_DIR}incs/
 
 # Print variables
 PRINTF := printf
@@ -43,15 +46,23 @@ PROGRESS = ${eval SRC_CNT = ${shell expr ${SRC_CNT} + 1}} \
 	$(SRC_CNT) $(SRC_TOT) $(SRC_PCT)
 
 # Main commands
-${NAME}: ${LIBDEQUE} ${OBJS}
-	@${CC} ${CFLAGS} ${INCS} ${OBJS} ${LIBFT} ${LIBDEQUE} ${LIBPQUEUE} -o $@
+${NAME}: ${LIBDEQUE} ${LIBPQUEUE} ${LIBHASHSET} ${OBJS}
+	@${CC} ${CFLAGS} ${INCS} ${OBJS} ${LIBFT} ${LIBDEQUE} ${LIBPQUEUE} ${LIBHASHSET} -o $@
 	@echo "\n${BLUE}--- ${NAME} is up to date! ---${DEFAULT}"
+
+${OBJS_DIR}%.o: ${SRCS_DIR}%.c
+	@mkdir -p ${OBJS_DIR}
+	@${PROGRESS}
+	@${CC} ${CFLAGS} ${INCS} -c $< -o $@
 
 ${LIBDEQUE}:
 	@${MAKE} -C ${LIBDEQUE_DIR} --no-print-directory
 
 ${LIBPQUEUE}:
 	@${MAKE} -C ${LIBPQUEUE_DIR} --no-print-directory
+
+${LIBHASHSET}:
+	@${MAKE} -C ${LIBHASHSET_DIR} --no-print-directory
 
 ${OBJS_DIR}%.o: ${SRCS_DIR}%.c
 	@${PROGRESS}
@@ -64,13 +75,17 @@ all: ${NAME}
 
 #: Remove all object files.
 clean:
-	${RM} ${OBJS} ${DEPS}
+	${RM} -r ${OBJS_DIR} ${DEPS}
 	@${MAKE} clean -C ${LIBDEQUE_DIR} --no-print-directory
+	@${MAKE} clean -C ${LIBPQUEUE_DIR} --no-print-directory
+	@${MAKE} clean -C ${LIBHASHSET_DIR} --no-print-directory
 
 #: Remove all object and executable files.
 fclean:	clean
 	${RM} ${NAME}
 	${RM} ${LIBDEQUE}
+	${RM} ${LIBPQUEUE}
+	${RM} ${LIBHASHSET}
 
 #: Remove and recompile all.
 re: fclean

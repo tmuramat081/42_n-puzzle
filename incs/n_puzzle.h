@@ -7,4 +7,6 @@ typedef struct {
 } t_board;
 
 
+#define MAX_LINE 100
+
 #endif
