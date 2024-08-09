@@ -3,7 +3,9 @@ CC := gcc -g
 CFLAGS := -Wall -Wextra -Werror
 
 SRCS_DIR := srcs/
-SRCS := main.c
+SRCS := \
+	main.c \
+	parser.c
 
 OBJS_DIR := objs/
 OBJS := ${addprefix ${OBJS_DIR},${SRCS:.c=.o}}
