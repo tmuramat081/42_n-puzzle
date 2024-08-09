@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-t_board* read_puzzle(const char *filename) {
+t_board* read_puzzle_board(const char *filename) {
     FILE *file = fopen(filename, "r");
     if (!file) {
         printf("ファイルを開けませんでした: %s\n", filename);
@@ -23,7 +23,8 @@ t_board* read_puzzle(const char *filename) {
 
     // グリッドのメモリ割り当て
     puzzle->board = malloc(puzzle->size * sizeof(int*));
-    for (int i = 0; i < puzzle->size; i++) {
+    for (int i = 0; i < puzzle->size; i++)
+    {
         puzzle->board[i] = malloc(puzzle->size * sizeof(int));
     }
 
@@ -44,8 +45,33 @@ t_board* read_puzzle(const char *filename) {
     return puzzle;
 }
 
-int main (void)
+void free_puzzle_board(t_board *puzzle_board) 
 {
+    if (!puzzle_board || !puzzle_board->board)
+        return;
+    while (puzzle_board->size--)
+    {
+        free(puzzle_board->board[puzzle_board->size]);
+    }
+    free(puzzle_board->board);
+    free(puzzle_board);
+}
 
+int main (int ac, char **av)
+{
+    t_board *puzzle_board;
+
+    if (ac != 2)
+    {
+        puts("wrong number of arguments");
+        exit(1);
+    }
+    puzzle_board = read_puzzle_board(av[1]);
+    if (!puzzle_board)
+    {
+        puts("error reading puzzle");
+        exit(1);
+    }
+    free_puzzle_board(puzzle_board);
     return (0);
 }

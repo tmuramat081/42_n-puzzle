@@ -36,7 +36,7 @@ ifndef SRC_TOT
 endif
 SRC_CNT := 0
 SRC_PCT = $(shell expr 100 \* $(SRC_CNT) / $(SRC_TOT))
-PROGRESS = $(evalator SRC_CNT = $(shell expr ${SRC_CNT} + 1)) \
+PROGRESS = $(eval SRC_CNT = $(shell expr ${SRC_CNT} + 1)) \
 	${PRINTF} "${DEL}${GREEN}[ %d/%d (%d%%) ] ${CC} ${CFLAGS} $< ...${DEFAULT}${CR}" $(SRC_CNT) $(SRC_TOT) $(SRC_PCT)
 
 # Command
