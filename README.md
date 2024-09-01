@@ -1,2 +1,2 @@
 # 42_n-puzzle
-School 42
+School 42 Project.
