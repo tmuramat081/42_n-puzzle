@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    "ft_hashset.h": "c",
+    "ft_priqueue.h": "c"
+  }
+}
